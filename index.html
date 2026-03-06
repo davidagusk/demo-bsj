@@ -1,3 +1,100 @@
+<!-- 
+CREATED BY DAVID AGUS KUNCORO
+IG : @DAVIDAGUSK
+WEB : https://davidagusk.github.io/
+DEMO ONLY 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -417,33 +514,18 @@
       <section class="section" id="news">
         <div class="sectionHead">
           <h2>BSJ News & Highlights</h2>
-          <a class="moreBtn" href="#">More news</a>
+          <a class="moreBtn" href="news.html">More news</a>
         </div>
 
-        <div class="newsCarousel" data-carousel="news">
-          <div class="cViewport" tabindex="0" aria-label="News carousel viewport">
-            <div class="cTrack">
-              <article class="card">
-                <div class="thumb" style="background-image: url(https://www.bsj.sch.id/storage/app/media/01-home/Be%20Spoke%20Campus.jpg)"></div>
-                <div class="cardBody">
-                  <h3><a href="news1.html">Open Day at BSJ: Meet Our Teachers & Explore the Campus</a></h3>
-                  <p>We welcome families to our Open Day experience...</p>
-                </div>
-              </article>
-              <article class="card">
-                <div class="thumb" style="background-image: url(https://www.bsj.sch.id/storage/app/uploads/public/69a/00a/5a8/69a00a5a8ae4f598993769.jpg)"></div>
-                <div class="cardBody">
-                  <h3><a href="news2.html">BSJ Students Shine at ReEarth International Art Prize 2025</a></h3>
-                  <p>BSJ secondary students earned international recognition at the ReEarth International Art Prize 2025...</p>
-                </div>
-              </article>
-            </div>
+        <div class="newsCarousel" id="homeNewsCarousel">
+          <div class="cViewport">
+            <div class="cTrack" id="newsCarouselTrack"></div>
           </div>
 
           <div class="cControls">
-            <button class="cArrow cPrev" type="button" aria-label="Previous">&lt;</button>
-            <div class="cDots" aria-label="Carousel pagination"></div>
-            <button class="cArrow cNext" type="button" aria-label="Next">&gt;</button>
+            <button class="cArrow cPrev" id="newsPrev" type="button" aria-label="Previous">&lt;</button>
+            <div class="cDots" id="newsDots" aria-label="Carousel pagination"></div>
+            <button class="cArrow cNext" id="newsNext" type="button" aria-label="Next">&gt;</button>
           </div>
         </div>
       </section>
@@ -633,6 +715,13 @@
       </div>
     </footer>
 
-    <script src="assets/frontend/site.js" defer></script>
+    <script src="assets/frontend/site.js"></script>
+    <script src="assets/frontend/news.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        initNewsCarousel();
+        initHomeNewsControls();
+      });
+    </script>
   </body>
 </html>

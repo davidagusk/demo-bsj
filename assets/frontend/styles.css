@@ -1483,19 +1483,27 @@ footer {
   justify-content: center;
   gap: 20px;
   margin-top: 14px;
+  position: relative;
+  z-index: 20;
+}
+
+.newsCarousel .cArrow,
+.newsCarousel .cDots {
+  position: relative;
+  z-index: 21;
+  pointer-events: auto;
 }
 
 .newsCarousel .cArrow {
-  all: unset; /* reset style lama */
+  appearance: none;
+  border: 0;
+  background: transparent;
   cursor: pointer;
-
   font-size: 18px;
   font-weight: 900;
   color: #fff;
-
   padding: 4px 8px;
   line-height: 1;
-
   opacity: 0.75;
   transition: all 0.2s ease;
 }
@@ -1838,4 +1846,407 @@ footer {
   fill: currentColor;
   color: #111;
   display: block;
+}
+
+#homeNewsCarousel {
+  position: relative;
+}
+
+#homeNewsCarousel .cViewport {
+  overflow: hidden;
+}
+
+#homeNewsCarousel .cTrack {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+#homeNewsCarousel .cTrack::-webkit-scrollbar {
+  display: none;
+}
+
+#homeNewsCarousel .cTrack > .card {
+  flex: 0 0 calc(33.333% - 12px);
+  min-width: calc(33.333% - 12px);
+}
+
+@media (max-width: 980px) {
+  #homeNewsCarousel .cTrack > .card {
+    flex: 0 0 calc(50% - 9px);
+    min-width: calc(50% - 9px);
+  }
+}
+
+@media (max-width: 560px) {
+  #homeNewsCarousel .cTrack > .card {
+    flex: 0 0 100%;
+    min-width: 100%;
+  }
+}
+
+/* controls wrapper */
+#homeNewsCarousel .cControls {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 18px;
+  min-height: 44px;
+}
+
+/* dots di tengah bawah */
+#homeNewsCarousel .cDots {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+#homeNewsCarousel .cDots button {
+  width: 18px;
+  height: 4px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+#homeNewsCarousel .cDots button[aria-current="true"] {
+  background: #ff1744;
+  transform: scaleX(1.2);
+}
+
+/* arrow dibuat floating kiri kanan */
+#homeNewsCarousel .cArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  appearance: none;
+  border: 0;
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#homeNewsCarousel .cPrev {
+  left: calc(50% - 90px);
+}
+
+#homeNewsCarousel .cNext {
+  right: calc(50% - 90px);
+}
+
+#homeNewsCarousel .cArrow:hover {
+  background: rgba(255, 255, 255, 0.14);
+  transform: translateY(-50%) scale(1.06);
+}
+
+#homeNewsCarousel .cArrow:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+@media (max-width: 560px) {
+  /* section news kasih ruang lebih aman dari header */
+  #news.section {
+    padding-top: 18px;
+  }
+
+  /* heading + tombol jangan sejajar paksa di mobile */
+  #news .sectionHead {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin: 0 0 14px;
+  }
+
+  #news .sectionHead h2 {
+    font-size: 18px;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  #news .sectionHead .moreBtn {
+    margin: 0;
+    height: 40px;
+    padding: 0 16px;
+    font-size: 12px;
+    position: static;
+    z-index: auto;
+  }
+
+  /* card 1 kolom penuh */
+  #homeNewsCarousel .cTrack {
+    gap: 12px;
+  }
+
+  #homeNewsCarousel .cTrack > .card {
+    flex: 0 0 100%;
+    min-width: 100%;
+  }
+
+  #homeNewsCarousel .cardBody {
+    padding: 14px;
+  }
+
+  #homeNewsCarousel .cardBody h3 {
+    font-size: 15px;
+    line-height: 1.35;
+  }
+
+  #homeNewsCarousel .cardBody p {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  /* controls mobile rapi */
+  #homeNewsCarousel .cControls {
+    display: grid;
+    grid-template-columns: 42px 1fr 42px;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+    min-height: 42px;
+  }
+
+  #homeNewsCarousel .cPrev,
+  #homeNewsCarousel .cNext {
+    position: static;
+    transform: none !important;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    justify-self: center;
+    appearance: none;
+    border: 0;
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    font-size: 20px;
+    font-weight: 900;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: none;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  #homeNewsCarousel .cPrev:hover,
+  #homeNewsCarousel .cNext:hover,
+  #homeNewsCarousel .cPrev:active,
+  #homeNewsCarousel .cNext:active,
+  #homeNewsCarousel .cPrev:focus,
+  #homeNewsCarousel .cNext:focus {
+    transform: none !important;
+    box-shadow: none;
+    outline: none;
+  }
+
+  #homeNewsCarousel .cPrev:focus-visible,
+  #homeNewsCarousel .cNext:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.3);
+    outline-offset: 2px;
+  }
+
+  #homeNewsCarousel .cDots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  #homeNewsCarousel .cDots button {
+    width: 14px;
+    height: 4px;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+  }
+}
+
+/* PANIGMA */
+.newsPagination {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.pageBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  height: 42px;
+  padding: 0 14px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  font-weight: 900;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pageBtn:hover {
+  filter: brightness(1.08);
+}
+
+.pageBtn.is-active {
+  background: linear-gradient(145deg, #ff1744, #e0002a);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+.pageBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+@media (max-width: 560px) {
+  .pageBtn {
+    min-width: 38px;
+    height: 38px;
+    padding: 0 10px;
+    font-size: 12px;
+  }
+}
+
+.newsSearchWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.newsSearchWrap input {
+  width: 100%;
+  height: 54px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02)), var(--panel);
+  color: var(--text);
+  padding: 0 48px 0 46px;
+  font-size: 14px;
+  font-weight: 700;
+  outline: none;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+.newsSearchWrap input::placeholder {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.newsSearchWrap input:focus {
+  border-color: rgba(255, 255, 255, 0.24);
+  box-shadow:
+    0 0 0 3px rgba(224, 0, 42, 0.16),
+    0 10px 26px rgba(0, 0, 0, 0.22);
+}
+
+.newsSearchIcon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.newsSearchIcon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.newsSearchClear {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  display: none;
+  transition:
+    background 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.newsSearchClear:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.newsSearchWrap.has-value .newsSearchClear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+:root[data-theme="light"] .newsSearchWrap input {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.88)), #fff;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+:root[data-theme="light"] .newsSearchWrap input:focus {
+  border-color: rgba(224, 0, 42, 0.28);
+  box-shadow:
+    0 0 0 3px rgba(224, 0, 42, 0.14),
+    0 10px 22px rgba(0, 0, 0, 0.08);
+}
+
+:root[data-theme="light"] .newsSearchClear {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+:root[data-theme="light"] .newsSearchClear:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 560px) {
+  .newsSearchWrap input {
+    height: 48px;
+    font-size: 13px;
+    padding-left: 42px;
+    padding-right: 42px;
+  }
+
+  .newsSearchIcon {
+    left: 14px;
+  }
+
+  .newsSearchClear {
+    right: 10px;
+    width: 28px;
+    height: 28px;
+  }
 }

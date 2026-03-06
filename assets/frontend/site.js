@@ -162,19 +162,24 @@
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     carousels.forEach((wrap) => {
+      if (wrap.dataset.inited === "true") return;
+      wrap.dataset.inited = "true";
+
       const track = $(".cTrack", wrap);
       const prev = $(".cPrev", wrap);
       const next = $(".cNext", wrap);
       const dots = $(".cDots", wrap);
+
       if (!track || !prev || !next || !dots) return;
 
-      const cards = Array.from(track.children);
+      const cards = Array.from(track.children).filter((el) => !el.classList.contains("is-clone"));
       if (cards.length < 2) return;
+
+      wrap.dataset.carouselReady = "true";
 
       const AUTO_MS = 3500;
       const CLONE_COUNT = Math.min(2, cards.length);
 
-      // build clones
       const headClones = cards.slice(0, CLONE_COUNT).map((n) => n.cloneNode(true));
       const tailClones = cards.slice(-CLONE_COUNT).map((n) => n.cloneNode(true));
 
@@ -184,25 +189,40 @@
       tailClones.reverse().forEach((n) => track.insertBefore(n, track.firstChild));
       headClones.forEach((n) => track.appendChild(n));
 
-      const allItems = Array.from(track.children);
+      const getAllItems = () => Array.from(track.children);
       const realCount = cards.length;
 
       const getStep = () => {
+        const allItems = getAllItems();
         const first = allItems[CLONE_COUNT];
         const second = allItems[CLONE_COUNT + 1] || first;
+        if (!first) return 0;
+
         const r1 = first.getBoundingClientRect();
         const r2 = second.getBoundingClientRect();
+
         return Math.round(Math.abs(r2.left - r1.left)) || Math.round(r1.width + 18);
       };
 
       const jumpToFirstReal = () => {
         const step = getStep();
+        if (!step) return;
         track.scrollLeft = step * CLONE_COUNT;
       };
 
-      // dots
       dots.innerHTML = "";
       const dotBtns = [];
+
+      const goToRealIndex = (realIndex) => {
+        const step = getStep();
+        if (!step) return;
+        const targetRaw = realIndex + CLONE_COUNT;
+        track.scrollTo({
+          left: targetRaw * step,
+          behavior: prefersReduced ? "auto" : "smooth",
+        });
+      };
+
       for (let i = 0; i < realCount; i++) {
         const b = document.createElement("button");
         b.type = "button";
@@ -213,24 +233,19 @@
       }
 
       const setActiveDot = (realIndex) => {
-        dotBtns.forEach((b, idx) => b.setAttribute("aria-current", idx === realIndex ? "true" : "false"));
+        dotBtns.forEach((b, idx) => {
+          b.setAttribute("aria-current", idx === realIndex ? "true" : "false");
+        });
       };
 
       const getNearestRealIndex = () => {
         const step = getStep();
+        if (!step) return 0;
+
         const raw = Math.round(track.scrollLeft / step);
         let real = raw - CLONE_COUNT;
         real = ((real % realCount) + realCount) % realCount;
         return real;
-      };
-
-      const goToRealIndex = (realIndex) => {
-        const step = getStep();
-        const targetRaw = realIndex + CLONE_COUNT;
-        track.scrollTo({
-          left: targetRaw * step,
-          behavior: prefersReduced ? "auto" : "smooth",
-        });
       };
 
       const updateOverflow = () => {
@@ -241,7 +256,10 @@
       let isLock = false;
       const correctInfiniteIfNeeded = () => {
         if (isLock) return;
+
         const step = getStep();
+        if (!step) return;
+
         const raw = Math.round(track.scrollLeft / step);
 
         if (raw < CLONE_COUNT) {
@@ -249,6 +267,7 @@
           track.scrollLeft = (raw + realCount) * step;
           isLock = false;
         }
+
         if (raw >= CLONE_COUNT + realCount) {
           isLock = true;
           track.scrollLeft = (raw - realCount) * step;
@@ -258,6 +277,8 @@
 
       const scrollByStep = (dir) => {
         const step = getStep();
+        if (!step) return;
+
         track.scrollTo({
           left: track.scrollLeft + dir * step,
           behavior: prefersReduced ? "auto" : "smooth",
@@ -267,9 +288,13 @@
       prev.addEventListener("click", () => scrollByStep(-1));
       next.addEventListener("click", () => scrollByStep(1));
 
-      // auto
       let timer = null;
       let paused = false;
+
+      const stopAuto = () => {
+        if (timer) clearInterval(timer);
+        timer = null;
+      };
 
       const startAuto = () => {
         if (prefersReduced) return;
@@ -279,19 +304,11 @@
         }, AUTO_MS);
       };
 
-      const stopAuto = () => {
-        if (timer) clearInterval(timer);
-        timer = null;
-      };
-
       wrap.addEventListener("mouseenter", () => (paused = true));
       wrap.addEventListener("mouseleave", () => (paused = false));
-      track.addEventListener("touchstart", () => (paused = true), {
-        passive: true,
-      });
+      track.addEventListener("touchstart", () => (paused = true), { passive: true });
       track.addEventListener("touchend", () => (paused = false));
 
-      // scroll update
       let raf = null;
       track.addEventListener("scroll", () => {
         if (raf) cancelAnimationFrame(raf);
@@ -617,3 +634,22 @@ function initShareButtons() {
 
   document.head.appendChild(script);
 })();
+
+function getParam(name) {
+  return new URLSearchParams(window.location.search).get(name);
+}
+
+const id = parseInt(getParam("id"));
+
+const news = NEWS_DATA.find((n) => n.id === id);
+
+if (news) {
+  document.title = news.title;
+
+  document.getElementById("newsTitle").innerText = news.title;
+  document.getElementById("newsMeta").innerText = news.tag + " • " + news.date;
+  document.getElementById("newsImage").src = news.image;
+  document.getElementById("newsContent").innerHTML = news.content;
+}
+
+window.initNewsCarousels = initNewsCarousels;
